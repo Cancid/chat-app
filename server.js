@@ -4,12 +4,11 @@ const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+const PORT = process.env.PORT || 5000
 
 const users = []
 
 console.log(__dirname)
-app.use(express.static(__dirname))
-
 
 app.get('/', (request, response) => {
   response.sendFile(__dirname + '/index.html')
@@ -27,12 +26,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('login', (user) => {
-    console.log('fhggfhf')
-    socket.broadcast.emit('userJoined', user)
+    socket.broadcast.emit('userJoined', user);
   })
 });
 
 
 server.listen(3000, () => {
-  console.log('Listening on port 3000');
+  console.log(PORT, () => console.log(`Listening on ${ PORT }`));
 });
