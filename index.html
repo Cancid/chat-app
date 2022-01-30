@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Chat</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+  </head>
+  <body>
+    <form id="login" action="" >
+      <input id="username"/>
+      <button>Let's Chat!</button>
+    </form>
+    <div id="chatbox"style="display: none">
+      <ul id="messages">Message Log</ul>
+      <form id="form" action="" >
+        <input id="input" /><button>Send</button>
+      </form>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const chatbox = document.getElementById('chatbox');
+      const messages = document.getElementById('messages');
+      const login = document.getElementById('login');
+      const username = document.getElementById('username');
+      const form = document.getElementById('form');
+      const input = document.getElementById('input');
+      
+      let user = ''
+
+      login.addEventListener('submit', (event) => {
+        event.preventDefault();
+        if (username.value) {
+          user = username.value;
+          chatbox.style = 'display: inline-block'
+          createItem(`${user} has joined the chat!`);
+          socket.emit('login', user);
+        }
+      });
+      
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        console.log(input.value);
+        if (input.value) {
+          let message = `${user}: ${input.value}`
+          createItem(message);
+          socket.emit('chat message', message);
+          input.value = '';
+        };
+      });
+
+      const createItem = (message) => {
+        let item = document.createElement('li');
+          item.textContent = message;
+          messages.appendChild(item);
+      };
+
+      socket.on('connection', function(connection) {
+        console.log(connection);
+      });
+
+      socket.on('userJoined', (user) => {
+        console.log("Final", user);
+        let item = document.createElement('li');
+        item.textContent = `${user} has joined the chat!`;
+        messages.appendChild(item);
+      });
+
+
+      socket.on('userDisconnect', function(userDisconnect) {
+        console.log(userDisconnect);
+      });
+
+      socket.on('chat message', function(msg) {
+        createItem(input.value);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    </script>
+  </body>
+</html>

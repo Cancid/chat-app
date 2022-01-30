@@ -1,0 +1,38 @@
+const express = require('express');
+const http = require('http');
+const app = express();
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+const users = []
+
+console.log(__dirname)
+app.use(express.static(__dirname))
+
+
+app.get('/', (request, response) => {
+  response.sendFile('index.html')
+});
+
+io.on('connection', (socket) => {
+  io.emit('connection', 'A user has connected');
+  // eslint-disable-next-line no-unused-vars
+  socket.on('disconnect', (reason) => {
+    io.emit('userDisconnect', 'A user has disconnected')
+  });
+
+  socket.on('chat message', (msg) => {
+    socket.broadcast.emit('chat message', msg);
+  });
+
+  socket.on('login', (user) => {
+    console.log('fhggfhf')
+    socket.broadcast.emit('userJoined', user)
+  })
+});
+
+
+server.listen(3000, () => {
+  console.log('Listening on port 3000');
+});
