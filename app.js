@@ -6,10 +6,12 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const PORT = process.env.PORT || 5000
 
-console.log(__dirname)
+
+app.use(express.static("public"));
+
 
 app.get('/', (request, response) => {
-  response.sendFile(__dirname + '/index.html')
+  response.sendFile('/index.html');
 });
 
 io.on('connection', (socket) => {
