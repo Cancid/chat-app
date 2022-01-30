@@ -6,8 +6,6 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 const PORT = process.env.PORT || 5000
 
-const users = []
-
 console.log(__dirname)
 
 app.get('/', (request, response) => {
