@@ -12,7 +12,7 @@ app.use(express.static(__dirname))
 
 
 app.get('/', (request, response) => {
-  response.sendFile('index.html')
+  response.sendFile(__dirname + '/index.html')
 });
 
 io.on('connection', (socket) => {
