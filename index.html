@@ -13,32 +13,39 @@
       <input id="username"/>
       <button>Let's Chat!</button>
     </form>
+    <ul id="users" action=""></ul>
     <div id="chatbox"style="display: none">
       <ul id="messages">Message Log</ul>
       <form id="form" action="" >
         <input id="input" /><button>Send</button>
       </form>
-    </div>
-    <script src="socket.io-client/dist/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io();
+      const socket = io({
+        autoconnect: false,
+        transports: ['websocket'], });
       const chatbox = document.getElementById('chatbox');
       const messages = document.getElementById('messages');
       const login = document.getElementById('login');
       const username = document.getElementById('username');
       const form = document.getElementById('form');
       const input = document.getElementById('input');
-      
-      let user = ''
+      const onlineUsers = document.getElementById('users');
+
+      let userList = []
 
       login.addEventListener('submit', (event) => {
         event.preventDefault();
         if (username.value) {
-          user = username.value;
-          chatbox.style = 'display: inline-block'
-          createItem(`${user} has joined the chat!`);
-          socket.emit('login', user);
+          socket.auth = { username: username.value };
+          console.log(socket)
+          socket.connect();
+          chatbox.style = "display: inline-block"
         }
+      });
+
+      socket.onAny((event, ...args) => {
+        console.log(event, args);
       });
       
       form.addEventListener('submit', function(event) {
@@ -62,8 +69,16 @@
         console.log(connection);
       });
 
+      socket.on('users', (users) => {
+        userList = users.username;
+        users.forEach(user => {
+          let item = document.createElement('li');
+          item.textContent = user.username;
+          onlineUsers.appendChild(item);
+        });
+      });
+
       socket.on('userJoined', (user) => {
-        console.log("Final", user);
         let item = document.createElement('li');
         item.textContent = `${user} has joined the chat!`;
         messages.appendChild(item);

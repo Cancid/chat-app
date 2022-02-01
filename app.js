@@ -1,36 +1,49 @@
 const express = require('express');
-const http = require('http');
 const app = express();
+const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const PORT = process.env.PORT || 5000
-
-
-app.use(express.static("public"));
+// app.use(express.static(path.join(__dirname, '/')))
 
 
 app.get('/', (request, response) => {
-  response.sendFile('/index.html');
+  response.sendFile(__dirname +'/index.html');
+});
+
+io.use((socket, next) => {
+  const username = socket.handshake.auth.username;
+  if (!username) {
+    return next(new Error("invalid username"));
+  }
+  socket.username = username;
+  next();
 });
 
 io.on('connection', (socket) => {
+  const users = [];
+  for (let [id, socket] of io.of("/").sockets) {
+    users.push({
+      userID: id,
+      username: socket.username,
+    });
+  }
+  socket.emit("users", users);
+
+  socket.broadcast.emit('userJoined', socket.username);
+
   io.emit('connection', 'A user has connected');
+
   // eslint-disable-next-line no-unused-vars
-  socket.on('disconnect', (reason) => {
+  socket.on('disconnect', (_reason) => {
     io.emit('userDisconnect', 'A user has disconnected')
   });
 
   socket.on('chat message', (msg) => {
     socket.broadcast.emit('chat message', msg);
   });
-
-  socket.on('login', (user) => {
-    socket.broadcast.emit('userJoined', user);
-  })
 });
 
-
-app.listen(PORT, () => {
-  console.log(`Our app is running on port ${ PORT }`);
+  server.listen(3000, () => {
+  // console.log(`Our app is running on port ${ PORT }`);
 });
