@@ -19,7 +19,7 @@ export default class App extends React.Component {
     super();
     this.state = {
       token: this.getToken(),
-      user: 'Test',
+      user: 'dgfg',
     };
   }
 
@@ -36,11 +36,9 @@ export default class App extends React.Component {
       return <Login setUser={this.setUser} />
     }
     return (
-      <SocketContext.Provider value={socket}>
         <div className="App">
           <ChatWindow user={this.state.user}/>
         </div>
-      </SocketContext.Provider>
     );
   } 
 }

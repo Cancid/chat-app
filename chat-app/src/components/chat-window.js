@@ -1,48 +1,81 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import UserList from './user-list';
 import ChatBox from './chat-box';
 import SendMessageForm from './send-message-form';
 import './chat.css'
-import { SocketContext } from '../context/socket';
+import io from 'socket.io-client'
+
+const SERVER = "http://127.0.0.1:3001";
+
+// const socket = io(SERVER, { transports: ['websocket'] });
+// socket.on('connection', function(connection) {
+//   console.log(connection);
+// });
 
 class ChatWindow extends React.Component {
-
-  socket = useContext(SocketContext)
 
   constructor(props) {
     super(props)
     this.state = {
-      currentUser: "James",
-      users: DUMMY_USERS,
-      messages: DUMMY_DATA,
-    }
+      users: [],
+      messages: [],
+    };
+
+    this.socket = io(SERVER, { 
+      transports: ['websocket'],
+      auth: { username: this.props.user },
+     })
+  }
+
+  componentDidMount() {
+    this.socket.on('connection', function(connection) {
+      console.log(connection);
+    });
+
+    this.socket.on('chat message', (message) => {
+      console.log(message)
+      this.setState({
+        messages: this.state.messages.concat([
+          message
+        ]),
+      })
+    })
+
+    this.socket.on('users', (usersOnline) => {
+      console.log(usersOnline)
+      this.setState({
+        users: usersOnline
+      })
+      console.log(this.state.users)
+    }) 
+  }
+
+  componentWillUnmount() {
+    this.socket.close();
   }
 
   handleNewMessage = (message) => {
     console.log(this.props.user)
-    this.setState({
-      messages: this.state.messages.concat([{
-        user: this.props.user,
-        text: message,
-      }]),
-    })
-    console.log(this.state.messages)
+    this.socket.emit('chat message', {
+      user: this.props.user,
+      text: message,
+    });
   }
 
   render() {
     return (
-      <div class="container">
-        <div class="row">
+      <div className="container">
+        <div className="row">
           <h1>Start Chatting!</h1>
-          <div class="col">
+          <div className="col">
             <ChatBox messages={this.state.messages} />
           </div>
-          <div class="col">
+          <div className="col">
             <UserList users={this.state.users} />
           </div>
         </div>
-        <div class="row">
-          <div class="col">
+        <div className="row">
+          <div className="col">
             <SendMessageForm onNewMessage={this.handleNewMessage} />
           </div>
         </div>
@@ -50,6 +83,8 @@ class ChatWindow extends React.Component {
     );
   }
 };
+
+
 
 const DUMMY_DATA = [
   {

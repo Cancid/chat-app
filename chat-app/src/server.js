@@ -26,36 +26,37 @@ app.get('/', (request, response) => {
 });
 
 
-// io.use((socket, next) => {
-//   const username = socket.handshake.auth.username;
-//   if (!username) {
-//     return next(new Error("invalid username"));
-//   }
-//   socket.username = username;
-//   next();
-// });
+io.use((socket, next) => {
+  const username = socket.handshake.auth.username;
+  if (!username) {
+    return next(new Error("invalid username"));
+  }
+  socket.username = username;
+  next();
+});
 
 io.on('connection', (socket) => {
+  console.log('User connected')
   const users = [];
   for (let [id, socket] of io.of("/").sockets) {
     users.push({
-      userID: id,
-      username: socket.username,
+      // userID: id,
+      user: socket.username,
     });
   }
-  socket.emit("users", users);
+  io.emit("users", users);
 
-  socket.broadcast.emit('userJoined', socket.username);
+  // socket.broadcast.emit('userJoined', socket.username);
 
   io.emit('connection', 'A user has connected');
 
-  // eslint-disable-next-line no-unused-vars
-  socket.on('disconnect', (_reason) => {
-    io.emit('userDisconnect', 'A user has disconnected')
-  });
+  // // eslint-disable-next-line no-unused-vars
+  // socket.on('disconnect', (_reason) => {
+  //   io.emit('userDisconnect', 'A user has disconnected')
+  // });
 
   socket.on('chat message', (msg) => {
-    socket.broadcast.emit('chat message', msg);
+    io.emit('chat message', msg);
   });
 });
 

@@ -5,10 +5,10 @@ class UserList extends React.Component {
     return (
       <div>
         <h2> User List</h2>
-        <ul class="list-group">
+        <ul className="list-group">
         {this.props.users.map((user) => {
           return(
-            <li class="list-group-item" key={user.id}>
+            <li className="list-group-item" key={user.id}>
               {user.user}
             </li>
           );

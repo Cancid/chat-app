@@ -4,10 +4,10 @@ class ChatBox extends React.Component {
     return (
       <div>
       <h2>Chat Window</h2>
-      <ul class="list-group" className="chatbox">
+      <ul className="chatbox list-group">
         {this.props.messages.map(message => {
           return(
-            <li class="list-group-item d-flex justify-content-between align-items-center" key={message.id}>
+            <li className="list-group-item d-flex justify-content-between align-items-center" key={message.id}>
               <div>
                 {message.user}
               </div>
