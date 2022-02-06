@@ -6,7 +6,13 @@ class UserList extends React.Component {
       <div>
         <h2> User List</h2>
         <ul class="list-group">
-          <li class="list-group-item" key={'test'}>Test</li>
+        {this.props.users.map((user) => {
+          return(
+            <li class="list-group-item" key={user.id}>
+              {user.user}
+            </li>
+          );
+        })} 
         </ul>
       </div>
     );

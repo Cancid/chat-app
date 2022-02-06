@@ -19,10 +19,14 @@ class SendMessageForm extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <input type="text" value={this.state.value} onChange={this.handleChange}></input>
-        <button type="submit">Send</button>
-      </form>
+        <form className="row g-1 send-message" onSubmit={this.handleSubmit}>
+          <div class="col-auto">
+            <input type="text" class="form-control" value={this.state.value} onChange={this.handleChange}></input>
+          </div>
+          <div class="col-auto">
+            <button type="submit" id="button-addon1" class="btn btn-primary">Send</button>
+          </div>
+        </form>
     );
   }
 }

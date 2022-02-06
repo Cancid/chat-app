@@ -11,15 +11,20 @@ const io = new Server(server, {
 const cors = require('cors');
 
 app.use(cors({
-  origin: 'https://localhost:3000'
+  origin: 'http://localhost:3000'
 }));
 
 // app.use(express.static(path.join(__dirname, '/')))
-
+app.use('/login', (request, response) => {
+  response.send({
+    token: 'test1234'
+  })
+})
 
 app.get('/', (request, response) => {
   response.sendFile(__dirname +'/index.html');
 });
+
 
 // io.use((socket, next) => {
 //   const username = socket.handshake.auth.username;

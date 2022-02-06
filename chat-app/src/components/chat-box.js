@@ -1,8 +1,9 @@
 import React from "react";
-
 class ChatBox extends React.Component {
   render() {
     return (
+      <div>
+      <h2>Chat Window</h2>
       <ul class="list-group" className="chatbox">
         {this.props.messages.map(message => {
           return(
@@ -17,6 +18,7 @@ class ChatBox extends React.Component {
           )
         })}
       </ul>
+      </div>
     );
   }  
 }

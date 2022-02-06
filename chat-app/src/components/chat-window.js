@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import UserList from './user-list';
 import ChatBox from './chat-box';
 import SendMessageForm from './send-message-form';
+import './chat.css'
+import { SocketContext } from '../context/socket';
+
 class ChatWindow extends React.Component {
-  
-  constructor() {
-    super()
+
+  socket = useContext(SocketContext)
+
+  constructor(props) {
+    super(props)
     this.state = {
       currentUser: "James",
       users: DUMMY_USERS,
@@ -14,9 +19,10 @@ class ChatWindow extends React.Component {
   }
 
   handleNewMessage = (message) => {
+    console.log(this.props.user)
     this.setState({
       messages: this.state.messages.concat([{
-        user: this.state.currentUser,
+        user: this.props.user,
         text: message,
       }]),
     })
@@ -30,10 +36,14 @@ class ChatWindow extends React.Component {
           <h1>Start Chatting!</h1>
           <div class="col">
             <ChatBox messages={this.state.messages} />
-            <SendMessageForm onNewMessage={this.handleNewMessage} />
           </div>
           <div class="col">
-            <UserList />
+            <UserList users={this.state.users} />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <SendMessageForm onNewMessage={this.handleNewMessage} />
           </div>
         </div>
       </div>
