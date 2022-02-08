@@ -16,9 +16,9 @@ app.use(cors({
 
 // app.use(express.static(path.join(__dirname, '/')))
 app.use('/login', (request, response) => {
-  response.send({
-    token: 'test1234'
-  })
+  response.send(
+    'test1234'
+  )
 })
 
 app.get('/', (request, response) => {

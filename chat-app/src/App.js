@@ -9,24 +9,28 @@ import { SocketContext, socket } from './context/socket';
 
 export default class App extends React.Component {
 
-  getToken = () => {
+  getUser = () => {
     const tokenString = sessionStorage.getItem('token');
     const userToken = JSON.parse(tokenString);
-    return userToken?.token;
+    return userToken
   }
 
   constructor() {
     super();
+    const userToken = this.getUser()
     this.state = {
-      token: this.getToken(),
-      user: 'dgfg',
+      token: userToken?.token,
+      user: userToken?.user,
     };
   }
 
   setUser = (userToken, username) => {
-    sessionStorage.setItem('token', JSON.stringify(userToken));
+    console.log(userToken)
+    let data = JSON.stringify({ token: userToken, "user": username })
+    sessionStorage.setItem('token', data);
+    // console.log(userToken)
     this.setState({
-      token: this.getToken(),
+      token: userToken,
       user: username,
     });
   }

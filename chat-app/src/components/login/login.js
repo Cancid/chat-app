@@ -18,7 +18,7 @@ class Login extends React.Component {
       },
       body: JSON.stringify(credentials)
     })
-    .then(data => data.json())
+    .then(data => data.text())
   }
 
   handleSubmit = async (event) => {
@@ -27,6 +27,7 @@ class Login extends React.Component {
       username: this.state.username,
       password: this.state.password,
     });
+    console.log(token)
     this.props.setUser(token, this.state.username)
   }
 

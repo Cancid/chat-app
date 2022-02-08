@@ -42,11 +42,9 @@ class ChatWindow extends React.Component {
     })
 
     this.socket.on('users', (usersOnline) => {
-      console.log(usersOnline)
       this.setState({
         users: usersOnline
       })
-      console.log(this.state.users)
     }) 
   }
 
