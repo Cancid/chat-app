@@ -1,6 +1,12 @@
 import React from "react";
 
 class UserList extends React.Component {
+
+  handleClick = (event) => {
+    console.log(event.target)
+    this.props.onUserClick(event.target.getAttribute('value'))
+  }
+
   render() {
     return (
       <div>
@@ -8,7 +14,7 @@ class UserList extends React.Component {
         <ul className="list-group">
         {this.props.users.map((user) => {
           return(
-            <li className="list-group-item" key={user.id}>
+            <li className="list-group-item" value={user.userId}  key={user.userId} onClick={this.handleClick}>
               {user.user}
             </li>
           );

@@ -1,10 +1,7 @@
-import React, {useState} from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React from 'react';
 import './App.css';
 import ChatWindow from './components/chat-window';
 import Login from './components/login/login';
-import { SocketContext, socket } from './context/socket';
-
 
 
 export default class App extends React.Component {

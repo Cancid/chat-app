@@ -19,7 +19,7 @@ class SendMessageForm extends React.Component {
     this.props.onNewMessage(this.state.value);
     this.setState({
       value: ""
-    })
+    });
     event.preventDefault();
   }
 
