@@ -5,7 +5,7 @@ import SendMessageForm from './send-message-form';
 import './chat.css'
 import io from 'socket.io-client'
 
-const SERVER = "http://127.0.0.1:3001";
+//const SERVER = "http://127.0.0.1:3001";
 
 class ChatWindow extends React.Component {
 
@@ -17,7 +17,7 @@ class ChatWindow extends React.Component {
       messages: [],
     };
 
-    this.socket = io(SERVER, { 
+    this.socket = io("http://127.0.0.1:3001", { 
       transports: ['websocket'],
       auth: { username: this.props.user },
      })
@@ -52,20 +52,21 @@ class ChatWindow extends React.Component {
       });
       console.log(this.state.users)
     });
-  };
+  }
 
   componentWillUnmount() {
     this.socket.close();
-  };
+  }
 
   handleNewMessage = (message) => {
-    console.log(this.props.user)
+    console.log('Handling Message')
     this.socket.emit('chat message', {
-      room: this.state.currentRoom,
+      // room: this.state.currentRoom,
       user: this.props.user,
       text: message,
     });
   };
+
 
   handleUserClick = (userId) => {
     this.setState({
@@ -75,6 +76,7 @@ class ChatWindow extends React.Component {
     console.log(this.state.currentRoom);
   };
 
+  
   render() {
     return (
       <div className="container">
@@ -95,8 +97,8 @@ class ChatWindow extends React.Component {
       </div>
     );
   }
-};
+}
 
-export default ChatWindow;
+export default ChatWindow
 
 

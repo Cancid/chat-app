@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import ChatWindow from './components/chat-window';
 import Login from './components/login/login';
+import Register from './components/login/register';
 
 
 export default class App extends React.Component {
@@ -34,7 +35,8 @@ export default class App extends React.Component {
 
   render() {
     if (!this.state.token) {
-      return <Login setUser={this.setUser} />
+      // return <Login setUser={this.setUser} />
+      return <Register setUser={this.setUser} />
     }
     return (
         <div className="App">

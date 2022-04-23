@@ -20,6 +20,7 @@ class SendMessageForm extends React.Component {
     this.setState({
       value: ""
     });
+    console.log(this.state.value)
     event.preventDefault();
   }
 

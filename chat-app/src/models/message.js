@@ -4,9 +4,13 @@ const Schema = mongoose.Schema;
 
 const MessageSchema = new Schema(
   {
-    user: { type: String, required: true},
-    text: { type: String, required: true }
+    room: { type: String, //required: true
+    },
+    user: { type: String, //required: true
+    },
+    text: { type: String, //required: true
+    }
   }
 )
 
-mongoose.model(MessageSchema);
+module.exports = mongoose.model('Message', MessageSchema);
